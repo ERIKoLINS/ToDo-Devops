@@ -1,0 +1,47 @@
+name: Deploy do To-Do App para o Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-e-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Baixa o código
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Passo 2: Login no Docker Hub
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_ERIKLINS }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Passo 3: Build e Push da imagem
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: eriklins/todo-app:latest
+
+  deploy-azure:
+    runs-on: ubuntu-latest
+    needs: build-e-push
+
+    steps:
+      # Passo 1: Baixa o código
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Passo 2: Deploy no Azure
+      - name: Deploy no Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'todo-eriklins'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: 'eriklins/todo-app:latest'
