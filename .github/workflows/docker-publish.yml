@@ -1,9 +1,9 @@
 name: Deploy do To-Do App para o Docker Hub
 
-on:
+amlon:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-e-push:
