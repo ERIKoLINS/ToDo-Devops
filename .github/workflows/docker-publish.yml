@@ -30,3 +30,20 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/todo-devops:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  
+  deploy-azure:
+    runs-on: ubuntu-latest
+    needs: build-e-push
+
+    steps:
+      # Passo 1: Baixa o código
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Passo 2: Deploy no Azure
+      - name: Deploy no Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'todo-eriklins'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: 'eriklins/todo-devops:latest'
