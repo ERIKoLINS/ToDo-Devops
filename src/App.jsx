@@ -33,7 +33,9 @@ export default function App() {
 
   return (
     <div>
-      <h1>To-Do List</h1>
+      <h1>To-Do List! alterada</h1>
+      <h1>Vai Brasil 🇧🇷</h1>
+      <img src="/neymar.jpg" alt="Neymar calvo da sorte" width={200} />
 
       <div>
         <input
